@@ -1,0 +1,61 @@
+<!doctype html>
+<head>
+	<title>Ncapsulate</title>
+	<link rel="stylesheet" href="static/style.css"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+	<header>
+		<img src="static/logo.png"/>
+	</header>
+
+	<section>
+		<div id="first-step" class="inner">
+			<p>Hey! How can I help you today?</p>
+			<div class="summary" onclick="click_next();">
+				<img src="static/transcript.png"/>
+				<p>Summary</p>
+			</div>
+			<div class="recording">
+				<img src="static/recording.png"/>
+				<p>Record</p>
+			</div>
+		</div>
+
+		<div id="second-step" class="inner">
+			<form action="/upload" method="post" enctype="multipart/form-data">
+				<p>Now, let's upload your file</p>
+				<input class="upload-file" id="file" type="file" name="file"/>
+				<button class="upload">
+					<img src="static/upload.png"/> Upload a file</button>
+			</form>
+		</div>
+	</section>
+
+	<script>
+		function click_next() {
+			let firstStep = document.getElementById("first-step");
+			let secondStep = document.getElementById("second-step");
+			firstStep.style.display = "none";
+			secondStep.style.display = "block";
+		}
+
+		function sendToServer() {
+			let video = document.getElementById("file").files[0];
+			let formData = new FormData();
+     
+			formData.append("file", video);
+			fetch('http://localhost:5000/upload', {method: "POST", body: formData})
+				.then(res => res.json())
+				.then(data => {
+					console.log(data)
+				})
+				.catch(error => {
+					console.log(error)
+				})
+		}
+	</script>
+</body>
+
+</html>
